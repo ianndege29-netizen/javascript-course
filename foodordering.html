@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Foodie - Food Ordering</title>
+    <style>
+        /* ========================= GENERAL STYLING ========================= */
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            color: white;
+            background-image: linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.55)), url("https://images.unsplash.com/photo-1504674900247-0877df9cc836");
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 50px;
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            
+        }
+
+        .logo h1 {
+            margin:0;
+            font-size: 30px;
+        }
+
+        nav {
+            display: flex;
+            gap: 25px;
+            align-items: center;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            
+    
+        
+        }
+
+        nav a:hover {
+            color: #ffb703;
+        }
+
+        
+        .hero {
+            min-height: 500px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .hero-content {
+            max-width: 700px;
+        }
+
+        .hero h2 {
+            font-size: 50px;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 20px;
+            line-height: 1.6;
+        }
+
+        
+        button {
+            border: none;
+            padding: 13px 25px;
+            border-radius: 8px;
+            background-color: #ff9f1c;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #f77f00;
+            transform: scale(1.03);
+        }
+
+
+        .menu {
+            padding: 50px;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.35);
+        }
+
+        .menu h2 {
+            font-size: 35px;
+        }
+
+        /* ========================= SEARCH ========================= */
+        #searchFood {
+            width: 80%;
+            max-width: 500px;
+            padding: 15px;
+            border: none;
+            border-radius: 25px;
+            outline: none;
+            font-size: 16px;
+            margin-bottom: 35px;
+        }
+        #foodContainer {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            max-width: 1100px;
+            margin: auto;
+        }
+
+    
+        .cart-section {
+            padding: 50px;
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(10px);
+            text-align: center;
+        }
+
+        .cart-section h2 {
+            font-size: 35px;
+        }
+
+        #cart {
+            max-width: 700px;
+            margin: 20px auto;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+        }
+
+        .cart-total {
+            margin-top: 25px;
+        }
+
+        
+        footer {
+            text-align: center;
+            padding: 25px;
+            background: rgba(0, 0, 0, 0.6);
+        }
+
+    
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 15px;
+                padding: 20px;
+            }
+
+            nav {
+                gap: 15px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .hero h2 {
+                font-size: 35px;
+            }
+
+            .hero p {
+                font-size: 17px;
+            }
+
+            #foodContainer {
+                grid-template-columns: 1fr;
+            }
+
+            .menu,
+            .cart-section {
+                padding: 30px 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="logo">
+            <h1>Foodie</h1>
+        </div>
+        <nav>
+            <a href="#">Home</a>
+            <a href="#">Menu</a>
+            <a href="#">About</a>
+            <a href="#">Contact</a>
+            <a href="#">Cart
+                🛒</a>
+        </nav>
+    </header>
+    <main>
+        <section class="hero">
+            <div class="hero-content">
+                <h2>Delicious Food, Delivered To You</h2>
+                <p> Order your favourite meals and enjoy fresh, delicious food wherever you are. </p>
+                <button>
+                    order Now
+                </button>
+            </div>
+        </section>
+        <section class="menu">
+            <h2>Our Menu</h2>
+            <input type="text" id="searchFood" placeholder="Search for food...">
+            <div id="foodContainer"></div>
+        </section>
+        <section class="cart-section">
+            <h2>Your Cart 🛒</h2>
+            <div id="cart"></div>
+            <div class="cart-total">
+                <h3> Total: KSh <span id="totalPrice">0</span> </h3>
+                <button id="checkoutBtn"> Checkout </button>
+            </div>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2026 Foodie. All rights reserved.</p>
+    </footer>
+    <script>
+        let foods = [
+        {
+                name:"chicken",
+                price: 450,
+            
+        },
+            {
+                name:"rice",
+                price: 350,
+            
+
+            },
+        {
+            name:"pilau",
+            price:350,
+        
+        },
+            {
+            name:"chips kuku",
+            price:650,
+            
+            },
+        {
+            name:"githeri",
+            price:150,
+            
+        },
+            {
+            name:"chapati",
+            price:40,
+    
+
+            },
+        {
+            name:"icecream",
+            price:150,
+        
+
+        }
+    
+        ]
+
+
+        let cartItems = [];
+
+    
+
+        let foodContainer = document.getElementById("foodContainer");
+
+        let CheckoutBtn = document.getElementById("checkoutBtn")
+
+        let searchFood = document.getElementById("searchFood");
+
+        let totalPrice = document.getElementById("totalPrice");
+
+        let cart = document.getElementById("cart");
+
+
+        CheckoutBtn.addEventListener("click", function(){
+
+            if(cartItems.length===0){
+
+                alert("your cart is empty!")
+            }
+            else{
+                alert("order succeful placed!")
+            }
+            })
+ 
+            
+
+        function displayFoods(foodArray){
+
+        foodContainer.innerHTML ="";
+
+        foodArray.forEach (function(food){
+
+        foodContainer.innerHTML+=`
+                <div>
+                    <imag src=""></image>
+                    <h3>${food.name}</h3>
+                    <p>${food.price}</p>
+                    <button class="addcart" data-name="${food.name}"> add to cart </button>
+                    `;
+            }
+        )}
+            displayFoods(foods);
+
+
+
+
+
+        searchFood.addEventListener("input",function(){
+
+            let searchValue = searchFood.value.toLowerCase();
+
+           let results= foods.filter(function(food){
+            
+            foodContainer.innerHTML ="";
+
+          return food.name.toLowerCase().startsWith(searchValue);
+
+        })
+        results.forEach(function(food){
+             foodContainer.innerHTML+=`
+        <div>
+            <h3>${food.name} </h3>
+            <p>${food.price}</p>
+            <button class="addcart" data-name="${food.name}"> add to cart </button>
+         </div>
+            `;  
+        })
+
+        addCartEvent();
+
+        })
+
+        function addCartEvent(){
+        let addBtn = document.querySelectorAll(".addcart");
+
+        addBtn.forEach(function(button){
+
+            button.addEventListener("click",function(event){
+
+                if(event.target.classList.contains("addCart"));
+
+              let foodname = button.dataset.name
+
+              let selectedFood = foods.find(function(food){
+
+                return foodname===food.name;
+              })
+
+                cartItems.push(selectedFood);
+
+                displayCart();
+                
+                console.log(cartItems);
+
+
+
+              })
+             })
+            }
+
+
+             function displayCart(){
+
+            cart.innerHTML = "";
+
+            let total = 0;
+
+                cartItems.forEach(function(food){
+
+                    cart.innerHTML+=`
+
+                    <div>
+
+                        <h3>${food.name}</h3>
+
+                        <p>${food.price}</p>
+
+                        </div>
+                        
+                        `;
+                            total = total+food.price;
+                    })
+
+                    totalPrice.textContent = total;
+             }
+             
+        
+            
+
+        
+            
+            
+        
+        
+        
+
+        
+    
+    
+
+
+
+        
+        
+
+
+
+
+    </script>
+</body>
+
+</html>
